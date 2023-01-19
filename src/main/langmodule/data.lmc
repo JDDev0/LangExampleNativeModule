@@ -6,4 +6,4 @@ maxSupportedVersion = v2.0.0
 supportedImplementations = Standard Lang
 
 moduleType = native
-nativeEntryPoint = ExampleModule.jar:me.jddev0.ExampleModule
+nativeEntryPoint = Module.jar:me.jddev0.ExampleModule
