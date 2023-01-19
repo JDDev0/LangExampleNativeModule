@@ -1,0 +1,18 @@
+fn.println(This file was called with &LANG_ARGS)
+fn.println()
+
+fn.printTerminal(3, \$LANG_MODULE_PATH \= $LANG_MODULE_PATH)
+fn.printTerminal(3, \$LANG_MODULE_FILE \= $LANG_MODULE_FILE)
+fn.println()
+
+fn.println(Simple output with parser.op(2 ** +|3))
+fn.println()
+
+fp.exampleFunc = ($a) -> {
+    fn.println(Called with $a)
+}
+
+fp.exampleFunc(test)
+fn.println()
+
+return parser.op(42 ** 2 ^ 15)

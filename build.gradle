@@ -1,0 +1,55 @@
+plugins {
+    id 'java'
+}
+
+group 'me.jddev0.lang.example.nativemodule'
+version '1.0'
+
+repositories {
+    mavenCentral()
+
+    flatDir {
+        dir 'lang'
+    }
+}
+
+dependencies {
+    compileOnly "me.jddev0:lang:1.0.0-dev"
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+String moduleJarBaseName = 'ExampleModule.jar'
+
+task cleanLangModuleBuild() {
+    delete layout.buildDirectory.dir('tmp/langmodule')
+}
+
+task buildNativeCode(type: Jar) {
+    archiveFileName = moduleJarBaseName
+
+    destinationDirectory = layout.buildDirectory.dir('tmp/langmodule/native')
+    with jar
+}
+
+task copyLangModuleFiles(type: Copy) {
+    from 'src/main/langmodule'
+
+    into layout.buildDirectory.dir('tmp/langmodule')
+}
+
+task prepareLangModuleFiles() {
+    dependsOn cleanLangModuleBuild, buildNativeCode, copyLangModuleFiles
+}
+
+task buildLangModule(type: Zip, dependsOn: prepareLangModuleFiles) {
+    from layout.buildDirectory.dir('tmp/langmodule')
+
+    archiveName 'module.lm'
+    destinationDir layout.buildDirectory.dir('libs').get().asFile
+}
+
+test {
+    useJUnitPlatform()
+}
