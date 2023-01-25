@@ -1,4 +1,4 @@
-name = example.module
+name = example_module
 
 minSupportedVersion = v1.0.0
 maxSupportedVersion = v2.0.0
