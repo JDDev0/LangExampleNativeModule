@@ -1,6 +1,8 @@
 package me.jddev0;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import me.jddev0.module.lang.*;
@@ -11,6 +13,7 @@ public class ExampleModule extends LangNativeModule {
 	@Override
 	public DataObject load(List<DataObject> args, final int SCOPE_ID) {
 		LangInterpreterInterface lii = new LangInterpreterInterface(interpreter);
+		LangModuleConfiguration lmc = module.getLangModuleConfiguration();
 
 		System.out.println("ExampleModule is loading...");
 		System.out.println();
@@ -39,6 +42,36 @@ public class ExampleModule extends LangNativeModule {
 
 			return new DataObject().setInt(innerCombinedArgs.size());
 		});
+
+		exportNormalVariable("testVar", new DataObject("This is a test variable provided by the \"" + lmc.getName() + "\" module!"));
+		exportNormalVariable("intVar", new DataObject().setInt(-42));
+		exportCollectionVariable("values", new DataObject().setArray(new DataObject[] {
+				new DataObject("firstVar"), new DataObject().setBoolean(true), new DataObject().setError(new DataObject.ErrorObject(LangInterpreter.InterpretingError.DIV_BY_ZERO))
+		}));
+		exportCollectionVariable("listOfValues", new DataObject().setList(new LinkedList<>(Arrays.asList(
+				new DataObject("Test variable"), new DataObject().setNull()
+		))));
+		exportFunctionPointerVariable("calc", new DataObject().setFunctionPointer(new FunctionPointerObject((interpreter, argumentList, INNER_SCOPE_ID) -> {
+			List<DataObject> combinedArgumentList = LangUtils.combineArgumentsWithoutArgumentSeparators(argumentList);
+			if(combinedArgumentList.size() != 3)
+				return new LangInterpreterInterface(interpreter).setErrnoErrorObject(LangInterpreter.InterpretingError.INVALID_ARG_COUNT, "3 arguments are needed", INNER_SCOPE_ID);
+
+			DataObject aObj = combinedArgumentList.get(0);
+			DataObject bObj = combinedArgumentList.get(1);
+			DataObject cObj = combinedArgumentList.get(2);
+
+			Number aNum = aObj.toNumber();
+			if(aNum == null)
+				return new LangInterpreterInterface(interpreter).setErrnoErrorObject(LangInterpreter.InterpretingError.INVALID_ARGUMENTS, "Argument 1 must be a number", INNER_SCOPE_ID);
+			Number bNum = bObj.toNumber();
+			if(bNum == null)
+				return new LangInterpreterInterface(interpreter).setErrnoErrorObject(LangInterpreter.InterpretingError.INVALID_ARGUMENTS, "Argument 2 must be a number", INNER_SCOPE_ID);
+			Number cNum = cObj.toNumber();
+			if(cNum == null)
+				return new LangInterpreterInterface(interpreter).setErrnoErrorObject(LangInterpreter.InterpretingError.INVALID_ARGUMENTS, "Argument 2 must be a number", INNER_SCOPE_ID);
+
+			return new DataObject().setInt(aNum.intValue() * bNum.intValue() + cNum.intValue() * cNum.intValue());
+		})));
 
 		LangPredefinedFunctionObject linkerInclude = lii.getPredefinedFunctions().get("include");
 
