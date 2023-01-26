@@ -15,4 +15,11 @@ fp.exampleFunc = ($a) -> {
 fp.exampleFunc(test)
 fn.println()
 
+fn.moduleExportNormalVariable(intFromLib, 42)
+fn.moduleExportNormalVariable(arrayFromLib, fn.arrayOf(1, abc, null, 5.8, 1.2f))
+
+fn.moduleExportCollectionVariable(arrFromLib, fn.arrayOf(1, abc, null, 5.8, 1.2f))
+
+fn.moduleExportFunctionPointerVariable(funcFromLib, fn.inc)
+
 return parser.op(42 ** 2 ^ 15)
