@@ -1,5 +1,5 @@
 # LangExampleNativeModule
-A example Lang native module for the Standard Lang implementation
+This is an example Lang native module for the Standard Lang implementation
 
 ## Setup & Compile
 1. Download the code from the [standard lang repository](https://github.com/JDDev0/lang)
