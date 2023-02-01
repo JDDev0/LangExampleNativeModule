@@ -45,12 +45,16 @@ public class ExampleModule extends LangNativeModule {
 
 		exportNormalVariable("testVar", new DataObject("This is a test variable provided by the \"" + lmc.getName() + "\" module!"));
 		exportNormalVariable("intVar", new DataObject().setInt(-42));
+		exportNormalVariableFinal("finalVar", new DataObject().setInt(-42));
 		exportCollectionVariable("values", new DataObject().setArray(new DataObject[] {
 				new DataObject("firstVar"), new DataObject().setBoolean(true), new DataObject().setError(new DataObject.ErrorObject(LangInterpreter.InterpretingError.DIV_BY_ZERO))
 		}));
 		exportCollectionVariable("listOfValues", new DataObject().setList(new LinkedList<>(Arrays.asList(
 				new DataObject("Test variable"), new DataObject().setNull()
 		))));
+		exportCollectionVariableFinal("finalValues", new DataObject().setArray(new DataObject[] {
+				new DataObject().setChar('a'), new DataObject().setBoolean(false)
+		}));
 		exportFunctionPointerVariable("calc", new DataObject().setFunctionPointer(new FunctionPointerObject((interpreter, argumentList, INNER_SCOPE_ID) -> {
 			List<DataObject> combinedArgumentList = LangUtils.combineArgumentsWithoutArgumentSeparators(argumentList);
 			if(combinedArgumentList.size() != 3)
@@ -71,6 +75,9 @@ public class ExampleModule extends LangNativeModule {
 				return new LangInterpreterInterface(interpreter).setErrnoErrorObject(LangInterpreter.InterpretingError.INVALID_ARGUMENTS, "Argument 2 must be a number", INNER_SCOPE_ID);
 
 			return new DataObject().setInt(aNum.intValue() * bNum.intValue() + cNum.intValue() * cNum.intValue());
+		})));
+		exportFunctionPointerVariableFinal("finalFunc", new DataObject().setFunctionPointer(new FunctionPointerObject((interpreter, argumentList, INNER_SCOPE_ID) -> {
+			return new DataObject().setInt(-42);
 		})));
 
 		LangPredefinedFunctionObject linkerInclude = lii.getPredefinedFunctions().get("include");
