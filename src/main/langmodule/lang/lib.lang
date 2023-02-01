@@ -18,8 +18,14 @@ fn.println()
 fn.moduleExportNormalVariable(intFromLib, 42)
 fn.moduleExportNormalVariable(arrayFromLib, fn.arrayOf(1, abc, null, 5.8, 1.2f))
 
+fn.moduleExportNormalVariable(finalVarFromLib, -42.84f, 1)
+
 fn.moduleExportCollectionVariable(arrFromLib, fn.arrayOf(1, abc, null, 5.8, 1.2f))
 
+fn.moduleExportCollectionVariable(finalArrFromLib, fn.arrayOf(42, $LANG_MODULE_FILE), 1)
+
 fn.moduleExportFunctionPointerVariable(funcFromLib, fn.inc)
+
+fn.moduleExportFunctionPointerVariable(finalFuncFromLib, fn.dec, 1)
 
 return parser.op(42 ** 2 ^ 15)
