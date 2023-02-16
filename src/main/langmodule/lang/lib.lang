@@ -28,4 +28,8 @@ fn.moduleExportFunctionPointerVariable(funcFromLib, fn.inc)
 
 fn.moduleExportFunctionPointerVariable(finalFuncFromLib, fn.dec, 1)
 
+# Exporting pointers
+$internalVariable = 42
+fn.moduleExportNormalVariable(pointerFromLib, $[internalVariable])
+
 return parser.op(42 ** 2 ^ 15)
