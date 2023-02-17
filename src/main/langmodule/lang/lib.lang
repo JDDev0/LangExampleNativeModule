@@ -16,6 +16,7 @@ fp.exampleFunc(test)
 fn.println()
 
 fn.moduleExportNormalVariable(intFromLib, 42)
+fn.moduleExportNormalVariable(secondIntFromLib, 2)
 fn.moduleExportNormalVariable(arrayFromLib, fn.arrayOf(1, abc, null, 5.8, 1.2f))
 
 fn.moduleExportNormalVariable(finalVarFromLib, -42.84f, 1)
@@ -34,5 +35,12 @@ fn.moduleExportNormalVariable(pointerFromLib, $[internalVariable])
 
 # Accessing exported module variables within the module (The module name must be used)
 fn.println(Int value from lib is [[example_module]]::$intFromLib and the int value from native is [[example_module]]::$intVar)
+
+# Modifying values of exported module variables (The exported variable may not be final)
+[[example_module]]::$intFromLib += 1000
+
+[[example_module]]::$secondIntFromLib = 30
+
+#[[example_module]]::$newInt = 2 # If uncommented: error: Module variables may only be created with the module export variable functions
 
 return parser.op(42 ** 2 ^ 15)
