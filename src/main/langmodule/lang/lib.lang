@@ -32,4 +32,7 @@ fn.moduleExportFunctionPointerVariable(finalFuncFromLib, fn.dec, 1)
 $internalVariable = 42
 fn.moduleExportNormalVariable(pointerFromLib, $[internalVariable])
 
+# Accessing exported module variables within the module (The module name must be used)
+fn.println(Int value from lib is [[example_module]]::$intFromLib and the int value from native is [[example_module]]::$intVar)
+
 return parser.op(42 ** 2 ^ 15)
