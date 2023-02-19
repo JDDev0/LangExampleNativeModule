@@ -27,16 +27,14 @@ public class ExampleModule extends LangNativeModule {
 
 		//Calling a predefined function
 		DataObject funcPrintln = getPredefinedFunctionAsDataObject("println");
-
-		List<DataObject> funcPrintlnArgs = new ArrayList<>();
-		funcPrintlnArgs.add(new DataObject("Hello world! From this module!"));
-
-		callFunctionPointer(funcPrintln, funcPrintlnArgs, SCOPE_ID);
+		callFunctionPointer(funcPrintln, Arrays.asList(
+				new DataObject("Hello world! From this module!")
+		), SCOPE_ID);
 
 		//Calling a predefined function (Alternate way)
-		List<DataObject> funcPrintlnArgs2 = new ArrayList<>();
-		funcPrintlnArgs2.add(new DataObject("Another print statement."));
-		callPredefinedFunction("println", funcPrintlnArgs2, SCOPE_ID);
+		callPredefinedFunction("println", Arrays.asList(
+				new DataObject("Another print statement.")
+		), SCOPE_ID);
 		
 		exportFunction("exampleFunction", (argumentList, INNER_SCOPE_ID) -> {
 			List<DataObject> innerCombinedArgs = LangUtils.combineArgumentsWithoutArgumentSeparators(argumentList);
@@ -83,14 +81,12 @@ public class ExampleModule extends LangNativeModule {
 			return new DataObject().setInt(-42);
 		})));
 
-		DataObject linkerInclude = getPredefinedFunctionAsDataObject("include");
-
-		List<DataObject> linkerIncludeArgs = new ArrayList<>();
-		linkerIncludeArgs.add(new DataObject("lib.lang"));
-		linkerIncludeArgs.add(new DataObject("Argument1 from ExampleModule"));
-		linkerIncludeArgs = LangUtils.separateArgumentsWithArgumentSeparators(linkerIncludeArgs);
-
-		DataObject ret = callFunctionPointer(linkerInclude, linkerIncludeArgs, SCOPE_ID);
+		DataObject ret = callPredefinedFunction("include", LangUtils.separateArgumentsWithArgumentSeparators(
+				Arrays.asList(
+						new DataObject("lib.lang"),
+						new DataObject("Argument1 from ExampleModule")
+				)
+		), SCOPE_ID);
 
 		//Accessing exported module variables within the module (The module name must be used [Use lmc.getName()])
 		Map<String, DataObject> exportedVars = lii.getModuleExportedVariables(lmc.getName());
