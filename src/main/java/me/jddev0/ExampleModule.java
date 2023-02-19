@@ -35,7 +35,7 @@ public class ExampleModule extends LangNativeModule {
 
 		//Calling a predefined function (Alternate way)
 		List<DataObject> funcPrintlnArgs2 = new ArrayList<>();
-		funcPrintlnArgs.add(new DataObject("Another print statement."));
+		funcPrintlnArgs2.add(new DataObject("Another print statement."));
 		callPredefinedFunction("println", funcPrintlnArgs2, SCOPE_ID);
 		
 		exportFunction("exampleFunction", (argumentList, INNER_SCOPE_ID) -> {
