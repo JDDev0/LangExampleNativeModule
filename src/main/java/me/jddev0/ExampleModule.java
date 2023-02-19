@@ -32,6 +32,11 @@ public class ExampleModule extends LangNativeModule {
 		funcPrintlnArgs.add(new DataObject("Hello world! From this module!"));
 
 		callFunctionPointer(funcPrintln, funcPrintlnArgs, SCOPE_ID);
+
+		//Calling a predefined function (Alternate way)
+		List<DataObject> funcPrintlnArgs2 = new ArrayList<>();
+		funcPrintlnArgs.add(new DataObject("Another print statement."));
+		callPredefinedFunction("println", funcPrintlnArgs2, SCOPE_ID);
 		
 		exportFunction("exampleFunction", (argumentList, INNER_SCOPE_ID) -> {
 			List<DataObject> innerCombinedArgs = LangUtils.combineArgumentsWithoutArgumentSeparators(argumentList);
