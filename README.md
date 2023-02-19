@@ -3,6 +3,7 @@ This is an example Lang native module for the Standard Lang implementation of la
 
 ## Git tags
 The git tags starting with `lang-` are used to mark the last commit of this repository which is still compatible with the standard lang release with that version number.
+Every commit after a tag requires either the next standard lang version or if no newer version was released, the latest state of the standard lang repository (= newest commit).
 
 ## Setup & Compile
 1. Download the code from the [standard lang repository](https://github.com/JDDev0/lang)
