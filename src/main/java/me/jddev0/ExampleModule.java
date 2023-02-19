@@ -24,13 +24,14 @@ public class ExampleModule extends LangNativeModule {
 		for(DataObject arg:combinedArgs)
 			System.out.println("    " + arg);
 		System.out.println();
-		
-		LangPredefinedFunctionObject funcPrintln = lii.getPredefinedFunctions().get("println");
+
+		//Calling a predefined function
+		DataObject funcPrintln = getPredefinedFunctionAsDataObject("println");
 
 		List<DataObject> funcPrintlnArgs = new ArrayList<>();
 		funcPrintlnArgs.add(new DataObject("Hello world! From this module!"));
 
-		lii.callFunctionPointer(new FunctionPointerObject(funcPrintln), "println", funcPrintlnArgs, SCOPE_ID);
+		callFunctionPointer(funcPrintln, funcPrintlnArgs, SCOPE_ID);
 		
 		exportFunction("exampleFunction", (argumentList, INNER_SCOPE_ID) -> {
 			List<DataObject> innerCombinedArgs = LangUtils.combineArgumentsWithoutArgumentSeparators(argumentList);
@@ -77,14 +78,14 @@ public class ExampleModule extends LangNativeModule {
 			return new DataObject().setInt(-42);
 		})));
 
-		LangPredefinedFunctionObject linkerInclude = lii.getPredefinedFunctions().get("include");
+		DataObject linkerInclude = getPredefinedFunctionAsDataObject("include");
 
 		List<DataObject> linkerIncludeArgs = new ArrayList<>();
 		linkerIncludeArgs.add(new DataObject("lib.lang"));
 		linkerIncludeArgs.add(new DataObject("Argument1 from ExampleModule"));
 		linkerIncludeArgs = LangUtils.separateArgumentsWithArgumentSeparators(linkerIncludeArgs);
 
-		DataObject ret = lii.callFunctionPointer(new FunctionPointerObject(linkerInclude), "include", linkerIncludeArgs, SCOPE_ID);
+		DataObject ret = callFunctionPointer(linkerInclude, linkerIncludeArgs, SCOPE_ID);
 
 		//Accessing exported module variables within the module (The module name must be used [Use lmc.getName()])
 		Map<String, DataObject> exportedVars = lii.getModuleExportedVariables(lmc.getName());
