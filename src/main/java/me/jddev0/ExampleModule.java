@@ -1,9 +1,6 @@
 package me.jddev0;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import me.jddev0.module.lang.*;
 import me.jddev0.module.lang.DataObject.FunctionPointerObject;
@@ -88,6 +85,20 @@ public class ExampleModule extends LangNativeModule {
 		linkerIncludeArgs = LangUtils.separateArgumentsWithArgumentSeparators(linkerIncludeArgs);
 
 		DataObject ret = lii.callFunctionPointer(new FunctionPointerObject(linkerInclude), "include", linkerIncludeArgs, SCOPE_ID);
+
+		//Accessing exported module variables within the module (The module name must be used [Use lmc.getName()])
+		Map<String, DataObject> exportedVars = lii.getModuleExportedVariables(lmc.getName());
+		if(exportedVars != null) {
+			System.out.println("Exported variables:");
+			for (Map.Entry<String, DataObject> varEntry : exportedVars.entrySet()) {
+				System.out.println("  -> " + varEntry.getKey() + ": " + varEntry.getValue());
+			}
+
+			DataObject intFromLibDataObject = exportedVars.get("$intFromLib");
+			if(intFromLibDataObject != null) {
+				System.out.println("$intFromLib[" + intFromLibDataObject.getType() + "]: " + intFromLibDataObject);
+			}
+		}
 
 		System.out.println("Test calling fn.exampleFunction!");
 
