@@ -33,7 +33,7 @@ public class ExampleModule extends LangNativeModule {
 
 		//Calling a predefined function (Alternate way)
 		callPredefinedFunction("println", Arrays.asList(
-				new DataObject("Another print statement.")
+				createDataObject("Another print statement.") //createDataObject can be used instead of new DataObject().set...()
 		), SCOPE_ID);
 		
 		exportFunction("exampleFunction", (argumentList, INNER_SCOPE_ID) -> {
@@ -41,20 +41,20 @@ public class ExampleModule extends LangNativeModule {
 
 			System.out.println("exampleFunction was called with " + innerCombinedArgs);
 
-			return new DataObject().setInt(innerCombinedArgs.size());
+			return createDataObject(innerCombinedArgs.size());
 		});
 
-		exportNormalVariable("testVar", new DataObject("This is a test variable provided by the \"" + lmc.getName() + "\" module!"));
-		exportNormalVariable("intVar", new DataObject().setInt(-42));
-		exportNormalVariableFinal("finalVar", new DataObject().setInt(-42));
-		exportCollectionVariable("values", new DataObject().setArray(new DataObject[] {
-				new DataObject("firstVar"), new DataObject().setBoolean(true), new DataObject().setError(new DataObject.ErrorObject(LangInterpreter.InterpretingError.DIV_BY_ZERO))
+		exportNormalVariable("testVar", createDataObject("This is a test variable provided by the \"" + lmc.getName() + "\" module!"));
+		exportNormalVariable("intVar", createDataObject(-42));
+		exportNormalVariableFinal("finalVar", createDataObject(-42));
+		exportCollectionVariable("values", createDataObject(new DataObject[] {
+				createDataObject("firstVar"), createDataObject(true), createDataObject(new DataObject.ErrorObject(LangInterpreter.InterpretingError.DIV_BY_ZERO))
 		}));
 		exportCollectionVariable("listOfValues", new DataObject().setList(new LinkedList<>(Arrays.asList(
-				new DataObject("Test variable"), new DataObject().setNull()
+				createDataObject("Test variable"), new DataObject().setNull()
 		))));
 		exportCollectionVariableFinal("finalValues", new DataObject().setArray(new DataObject[] {
-				new DataObject().setChar('a'), new DataObject().setBoolean(false)
+				createDataObject('a'), createDataObject(false)
 		}));
 		exportFunctionPointerVariable("calc", new DataObject().setFunctionPointer(new FunctionPointerObject((interpreter, argumentList, INNER_SCOPE_ID) -> {
 			List<DataObject> combinedArgumentList = LangUtils.combineArgumentsWithoutArgumentSeparators(argumentList);
@@ -75,16 +75,16 @@ public class ExampleModule extends LangNativeModule {
 			if(cNum == null)
 				return new LangInterpreterInterface(interpreter).setErrnoErrorObject(LangInterpreter.InterpretingError.INVALID_ARGUMENTS, "Argument 2 must be a number", INNER_SCOPE_ID);
 
-			return new DataObject().setInt(aNum.intValue() * bNum.intValue() + cNum.intValue() * cNum.intValue());
+			return createDataObject(aNum.intValue() * bNum.intValue() + cNum.intValue() * cNum.intValue());
 		})));
 		exportFunctionPointerVariableFinal("finalFunc", new DataObject().setFunctionPointer(new FunctionPointerObject((interpreter, argumentList, INNER_SCOPE_ID) -> {
-			return new DataObject().setInt(-42);
+			return createDataObject(-42);
 		})));
 
 		DataObject ret = callPredefinedFunction("include", LangUtils.separateArgumentsWithArgumentSeparators(
 				Arrays.asList(
-						new DataObject("lib.lang"),
-						new DataObject("Argument1 from ExampleModule")
+						createDataObject("lib.lang"),
+						createDataObject("Argument1 from ExampleModule")
 				)
 		), SCOPE_ID);
 
@@ -104,8 +104,8 @@ public class ExampleModule extends LangNativeModule {
 
 		System.out.println("Test calling fn.exampleFunction!");
 
-		return new DataObject().setArray(new DataObject[] {
-				new DataObject("Example module return value (the value at index 1 is from lib.lang)"),
+		return createDataObject(new DataObject[] {
+				createDataObject("Example module return value (the value at index 1 is from lib.lang)"),
 				ret
 		});
 	}
@@ -114,7 +114,7 @@ public class ExampleModule extends LangNativeModule {
 	public DataObject unload(List<DataObject> args, final int SCOPE_ID) {
 		System.out.println("ExampleModule is unloading...");
 		
-		return new DataObject("Good bye!");
+		return createDataObject("Good bye!");
 	}
 
 	private void printModuleInformation(LangInterpreterInterface lii, final int SCOPE_ID) {
