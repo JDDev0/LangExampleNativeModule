@@ -102,6 +102,43 @@ public class ExampleModule extends LangNativeModule {
 			}
 		}
 
+		exportFunction("testConvertToDataObject", (argumentList, INNER_SCOPE_ID) -> {
+			List<DataObject> combinedArgumentList = LangUtils.combineArgumentsWithoutArgumentSeparators(argumentList);
+			if(combinedArgumentList.size() > 1)
+				return new LangInterpreterInterface(interpreter).setErrnoErrorObject(LangInterpreter.InterpretingError.INVALID_ARG_COUNT, "0 ore 1 argument(s) are needed", INNER_SCOPE_ID);
+
+			if(combinedArgumentList.size() == 0) {
+				callPredefinedFunction("println", Arrays.asList(
+						createDataObject("Call \"func.testConvertToDataObject()\" with 0 for normal output or with 1 for debug output using \"func.printDebug()\" [1 Will only work in the LangShell]")
+				), INNER_SCOPE_ID);
+
+				return null;
+			}
+
+			boolean useLangShellsPrintDebug = combinedArgumentList.get(0).getBoolean();
+
+			printDataObjectInformation(convertToDataObject(null), useLangShellsPrintDebug, INNER_SCOPE_ID);
+			printDataObjectInformation(convertToDataObject("text"), useLangShellsPrintDebug, INNER_SCOPE_ID);
+			printDataObjectInformation(convertToDataObject(new Object[] {
+					2, "test", null, Character.class
+			}), useLangShellsPrintDebug, INNER_SCOPE_ID);
+			printDataObjectInformation(convertToDataObject(42), useLangShellsPrintDebug, INNER_SCOPE_ID);
+			printDataObjectInformation(convertToDataObject(true), useLangShellsPrintDebug, INNER_SCOPE_ID);
+			printDataObjectInformation(convertToDataObject(42.2f), useLangShellsPrintDebug, INNER_SCOPE_ID);
+			printDataObjectInformation(convertToDataObject(42.2), useLangShellsPrintDebug, INNER_SCOPE_ID);
+			printDataObjectInformation(convertToDataObject('a'), useLangShellsPrintDebug, INNER_SCOPE_ID);
+			printDataObjectInformation(convertToDataObject(new RuntimeException("A custom error")), useLangShellsPrintDebug, INNER_SCOPE_ID);
+			printDataObjectInformation(convertToDataObject(new IllegalStateException("Another error")), useLangShellsPrintDebug, INNER_SCOPE_ID);
+			printDataObjectInformation(convertToDataObject(Integer.class), useLangShellsPrintDebug, INNER_SCOPE_ID);
+			printDataObjectInformation(convertToDataObject(Boolean.class), useLangShellsPrintDebug, INNER_SCOPE_ID);
+			printDataObjectInformation(convertToDataObject(Long.class), useLangShellsPrintDebug, INNER_SCOPE_ID);
+			printDataObjectInformation(convertToDataObject(Class.class), useLangShellsPrintDebug, INNER_SCOPE_ID);
+
+			return null;
+		});
+
+		System.out.println("Test convertToDataObject() by calling \"func.testConvertToDataObject()\"");
+
 		System.out.println("Test calling fn.exampleFunction!");
 
 		return createDataObject(new DataObject[] {
@@ -135,5 +172,29 @@ public class ExampleModule extends LangNativeModule {
 
 		System.out.println("Module Path: " + lii.getData(SCOPE_ID).var.get("$LANG_MODULE_PATH"));
 		System.out.println("Module File: " + lii.getData(SCOPE_ID).var.get("$LANG_MODULE_FILE"));
+	}
+
+	private void printDataObjectInformation(DataObject dataObject, boolean useLangShellsPrintDebug, final int SCOPE_ID) {
+		if(useLangShellsPrintDebug) {
+			DataObject printDebugFunc = getPredefinedFunctionAsDataObject("printDebug");
+			if(printDebugFunc == null) {
+				LangInterpreterInterface lii = new LangInterpreterInterface(interpreter);
+				lii.setErrno(LangInterpreter.InterpretingError.INVALID_ARGUMENTS, "func.printDebug() can only be used inside the LangShell", SCOPE_ID);
+
+				return;
+			}
+
+			callFunctionPointer(printDebugFunc, Arrays.asList(
+					dataObject
+			), SCOPE_ID);
+			callPredefinedFunction("println", new LinkedList<>(), SCOPE_ID);
+
+			return;
+		}
+
+		System.out.println("DataObject:");
+		System.out.println("    Type: " + dataObject.getType());
+		System.out.println("    String representation: " + dataObject);
+		System.out.println();
 	}
 }
