@@ -1,4 +1,6 @@
 name = example_module
+description = This is an example native module that can be used as a base for developing native modules.
+version = 1.0.0-beta
 
 minSupportedVersion = v1.0.0
 maxSupportedVersion = v2.0.0
