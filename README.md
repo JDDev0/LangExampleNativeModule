@@ -1,4 +1,4 @@
-# LangExampleNativeModule
+# Lang Example Native Module
 This is an example Lang native module for the Standard Lang implementation of lang
 
 ## Git tags
