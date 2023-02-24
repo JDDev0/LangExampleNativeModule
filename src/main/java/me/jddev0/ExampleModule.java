@@ -164,6 +164,8 @@ public class ExampleModule extends LangNativeModule {
 
 		System.out.println("Lang Module configuration:");
 		System.out.println("    Name              : " + lmc.getName());
+		System.out.println("    Description       : " + lmc.getDescription());
+		System.out.println("    Version           : " + lmc.getVersion());
 		System.out.println("    Min ver           : " + lmc.getMinSupportedVersion());
 		System.out.println("    Max ver           : " + lmc.getMaxSupportedVersion());
 		System.out.println("    Native entry point: " + lmc.getNativeEntryPoint());
