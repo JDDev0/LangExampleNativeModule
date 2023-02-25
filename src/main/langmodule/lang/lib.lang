@@ -34,13 +34,13 @@ $internalVariable = 42
 fn.moduleExportNormalVariable(pointerFromLib, $[internalVariable])
 
 # Accessing exported module variables within the module (The module name must be used)
-fn.println(Int value from lib is [[example_module]]::$intFromLib and the int value from native is [[example_module]]::$intVar)
+fn.println(Int value from lib is [[example]]::$intFromLib and the int value from native is [[example]]::$intVar)
 
 # Modifying values of exported module variables (The exported variable may not be final)
-[[example_module]]::$intFromLib += 1000
+[[example]]::$intFromLib += 1000
 
-[[example_module]]::$secondIntFromLib = 30
+[[example]]::$secondIntFromLib = 30
 
-#[[example_module]]::$newInt = 2 # If uncommented: error: Module variables may only be created with the module export variable functions
+#[[example]]::$newInt = 2 # If uncommented: error: Module variables may only be created with the module export variable functions
 
 return parser.op(42 ** 2 ^ 15)
