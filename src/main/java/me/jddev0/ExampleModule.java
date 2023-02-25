@@ -122,6 +122,9 @@ public class ExampleModule extends LangNativeModule {
 			printDataObjectInformation(convertToDataObject(new Object[] {
 					2, "test", null, Character.class
 			}), useLangShellsPrintDebug, INNER_SCOPE_ID);
+			printDataObjectInformation(convertToDataObject(new byte[] {
+					2, -1, (byte)255, 127, -128, 0, (byte)'A', (byte)'B', (byte)'µ', (byte)1555
+			}), useLangShellsPrintDebug, INNER_SCOPE_ID);
 			printDataObjectInformation(convertToDataObject(42), useLangShellsPrintDebug, INNER_SCOPE_ID);
 			printDataObjectInformation(convertToDataObject(true), useLangShellsPrintDebug, INNER_SCOPE_ID);
 			printDataObjectInformation(convertToDataObject(42.2f), useLangShellsPrintDebug, INNER_SCOPE_ID);
@@ -133,6 +136,10 @@ public class ExampleModule extends LangNativeModule {
 			printDataObjectInformation(convertToDataObject(Boolean.class), useLangShellsPrintDebug, INNER_SCOPE_ID);
 			printDataObjectInformation(convertToDataObject(Long.class), useLangShellsPrintDebug, INNER_SCOPE_ID);
 			printDataObjectInformation(convertToDataObject(Class.class), useLangShellsPrintDebug, INNER_SCOPE_ID);
+			printDataObjectInformation(convertToDataObject(Object[].class), useLangShellsPrintDebug, INNER_SCOPE_ID); //DataType.ARRAY
+			printDataObjectInformation(convertToDataObject(DataObject[].class), useLangShellsPrintDebug, INNER_SCOPE_ID); //DataType.ARRAY
+			printDataObjectInformation(convertToDataObject(Byte[].class), useLangShellsPrintDebug, INNER_SCOPE_ID); //DataType.ARRAY
+			printDataObjectInformation(convertToDataObject(byte[].class), useLangShellsPrintDebug, INNER_SCOPE_ID); //ByteBuffer.ARRAY
 
 			return null;
 		});
