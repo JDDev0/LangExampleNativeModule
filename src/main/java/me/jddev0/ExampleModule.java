@@ -187,8 +187,7 @@ public class ExampleModule extends LangNativeModule {
 		if(useLangShellsPrintDebug) {
 			DataObject printDebugFunc = getPredefinedFunctionAsDataObject("printDebug");
 			if(printDebugFunc == null) {
-				LangInterpreterInterface lii = new LangInterpreterInterface(interpreter);
-				lii.setErrno(LangInterpreter.InterpretingError.INVALID_ARGUMENTS, "func.printDebug() can only be used inside the LangShell", SCOPE_ID);
+				throwError(LangInterpreter.InterpretingError.INVALID_ARGUMENTS, "func.printDebug() can only be used inside the LangShell", SCOPE_ID);
 
 				return;
 			}
