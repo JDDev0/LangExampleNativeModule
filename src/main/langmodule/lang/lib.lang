@@ -37,6 +37,9 @@ fn.moduleExportFunctionPointerVariable(finalFuncFromLib, fn.dec, 1)
 }
 fn.moduleExportCollectionVariable(ExampleLibStruct, &ExampleLibStruct)
 
+&exampleLibStructInstance = fn.structOf(&ExampleLibStruct, 42.42f, A text value, 42)
+fn.moduleExportCollectionVariable(exampleLibStructInstance, &exampleLibStructInstance)
+
 # Exporting pointers
 $internalVariable = 42
 fn.moduleExportNormalVariable(pointerFromLib, $[internalVariable])
