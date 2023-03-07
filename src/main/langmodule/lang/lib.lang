@@ -29,6 +29,14 @@ fn.moduleExportFunctionPointerVariable(funcFromLib, fn.inc)
 
 fn.moduleExportFunctionPointerVariable(finalFuncFromLib, fn.dec, 1)
 
+# Structs
+&ExampleLibStruct = {
+    $val
+    $text{?TEXT}
+    $int{?INT}
+}
+fn.moduleExportCollectionVariable(ExampleLibStruct, &ExampleLibStruct)
+
 # Exporting pointers
 $internalVariable = 42
 fn.moduleExportNormalVariable(pointerFromLib, $[internalVariable])
