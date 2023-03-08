@@ -108,6 +108,13 @@ public class ExampleModule extends LangNativeModule {
 		});
 		exportCollectionVariable("ExampleStruct", new DataObject().setStruct(exampleStruct));
 
+		DataObject.StructObject exampleStructInstance = new DataObject.StructObject(exampleStruct, new DataObject[] {
+				createDataObject("A text value"),
+				createDataObject("Another text"),
+				createDataObject(42.42)
+		});
+		exportCollectionVariable("exampleStructInstance", new DataObject().setStruct(exampleStructInstance));
+
 		//Accessing exported module variables within the module (The module name must be used [Use lmc.getName()])
 		Map<String, DataObject> exportedVars = lii.getModuleExportedVariables(lmc.getName());
 		if(exportedVars != null) {
