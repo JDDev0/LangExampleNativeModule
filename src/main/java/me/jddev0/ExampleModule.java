@@ -88,6 +88,26 @@ public class ExampleModule extends LangNativeModule {
 				)
 		), SCOPE_ID);
 
+		final DataObject.DataTypeConstraint TYPE_CONSTRAINT_OPTIONAL_TEXT = DataObject.DataTypeConstraint.fromAllowedTypes(Arrays.asList(
+				DataObject.DataType.NULL, DataObject.DataType.TEXT
+		));
+
+		final DataObject.DataTypeConstraint TYPE_CONSTRAINT_OPTIONAL_DOUBLE = DataObject.DataTypeConstraint.fromAllowedTypes(Arrays.asList(
+				DataObject.DataType.NULL, DataObject.DataType.DOUBLE
+		));
+
+		//Structs
+		DataObject.StructObject exampleStruct = new DataObject.StructObject(new String[] {
+				"$val",
+				"$text",
+				"$double"
+		}, new DataObject.DataTypeConstraint[] {
+				DataObject.CONSTRAINT_NORMAL,
+				TYPE_CONSTRAINT_OPTIONAL_TEXT,
+				TYPE_CONSTRAINT_OPTIONAL_DOUBLE
+		});
+		exportCollectionVariable("ExampleStruct", new DataObject().setStruct(exampleStruct));
+
 		//Accessing exported module variables within the module (The module name must be used [Use lmc.getName()])
 		Map<String, DataObject> exportedVars = lii.getModuleExportedVariables(lmc.getName());
 		if(exportedVars != null) {
