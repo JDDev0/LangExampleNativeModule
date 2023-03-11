@@ -108,6 +108,10 @@ public class ExampleModule extends LangNativeModule {
 		});
 		exportCollectionVariable("ExampleStruct", new DataObject().setStruct(exampleStruct));
 
+		System.out.println("Member names of &ExampleStruct:");
+		for(String memberName: exampleStruct.getMemberNames())
+			System.out.println("    " + memberName);
+
 		DataObject.StructObject exampleStructInstance = new DataObject.StructObject(exampleStruct, new DataObject[] {
 				createDataObject("A text value"),
 				createDataObject("Another text"),
