@@ -116,6 +116,10 @@ public class ExampleModule extends LangNativeModule {
 		System.out.println("Index of the $val member in &ExampleStruct: " + exampleStruct.getIndexOfMember("$val"));
 		System.out.println();
 
+		System.out.println("Type constraints of &ExampleStruct members:");
+		for(String memberName:exampleStruct.getMemberNames())
+			System.out.println("    " + memberName + exampleStruct.getTypeConstraints()[exampleStruct.getIndexOfMember(memberName)].toTypeConstraintSyntax());
+
 		DataObject.StructObject exampleStructInstance = new DataObject.StructObject(exampleStruct, new DataObject[] {
 				createDataObject("A text value"),
 				createDataObject("Another text"),
