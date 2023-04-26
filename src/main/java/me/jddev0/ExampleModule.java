@@ -47,13 +47,13 @@ public class ExampleModule extends LangNativeModule {
 		exportNormalVariable("testVar", createDataObject("This is a test variable provided by the \"" + lmc.getName() + "\" module!"));
 		exportNormalVariable("intVar", createDataObject(-42));
 		exportNormalVariableFinal("finalVar", createDataObject(-42));
-		exportCollectionVariable("values", createDataObject(new DataObject[] {
+		exportCompositeVariable("values", createDataObject(new DataObject[] {
 				createDataObject("firstVar"), createDataObject(true), createDataObject(new DataObject.ErrorObject(LangInterpreter.InterpretingError.DIV_BY_ZERO))
 		}));
-		exportCollectionVariable("listOfValues", new DataObject().setList(new LinkedList<>(Arrays.asList(
+		exportCompositeVariable("listOfValues", new DataObject().setList(new LinkedList<>(Arrays.asList(
 				createDataObject("Test variable"), new DataObject().setNull()
 		))));
-		exportCollectionVariableFinal("finalValues", new DataObject().setArray(new DataObject[] {
+		exportCompositeVariableFinal("finalValues", new DataObject().setArray(new DataObject[] {
 				createDataObject('a'), createDataObject(false)
 		}));
 		exportFunctionPointerVariable("calc", new DataObject().setFunctionPointer(new FunctionPointerObject((interpreter, argumentList, INNER_SCOPE_ID) -> {
@@ -106,7 +106,7 @@ public class ExampleModule extends LangNativeModule {
 				TYPE_CONSTRAINT_OPTIONAL_TEXT,
 				TYPE_CONSTRAINT_OPTIONAL_DOUBLE
 		});
-		exportCollectionVariable("ExampleStruct", new DataObject().setStruct(exampleStruct));
+		exportCompositeVariable("ExampleStruct", new DataObject().setStruct(exampleStruct));
 
 		System.out.println("Member names of &ExampleStruct:");
 		for(String memberName:exampleStruct.getMemberNames())
@@ -125,7 +125,7 @@ public class ExampleModule extends LangNativeModule {
 				createDataObject("Another text"),
 				createDataObject(42.42)
 		});
-		exportCollectionVariable("exampleStructInstance", new DataObject().setStruct(exampleStructInstance));
+		exportCompositeVariable("exampleStructInstance", new DataObject().setStruct(exampleStructInstance));
 
 		System.out.println("Member names and values of &exampleStructInstance:");
 		for(String memberName:exampleStructInstance.getMemberNames())
