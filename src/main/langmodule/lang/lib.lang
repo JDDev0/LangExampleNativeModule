@@ -21,9 +21,9 @@ fn.moduleExportNormalVariable(arrayFromLib, fn.arrayOf(1, abc, null, 5.8, 1.2f))
 
 fn.moduleExportNormalVariable(finalVarFromLib, -42.84f, 1)
 
-fn.moduleExportCollectionVariable(arrFromLib, fn.arrayOf(1, abc, null, 5.8, 1.2f))
+fn.moduleExportCompositeVariable(arrFromLib, fn.arrayOf(1, abc, null, 5.8, 1.2f))
 
-fn.moduleExportCollectionVariable(finalArrFromLib, fn.arrayOf(42, $LANG_MODULE_FILE), 1)
+fn.moduleExportCompositeVariable(finalArrFromLib, fn.arrayOf(42, $LANG_MODULE_FILE), 1)
 
 fn.moduleExportFunctionPointerVariable(funcFromLib, fn.inc)
 
@@ -35,10 +35,10 @@ fn.moduleExportFunctionPointerVariable(finalFuncFromLib, fn.dec, 1)
     $text{?TEXT}
     $int{?INT}
 }
-fn.moduleExportCollectionVariable(ExampleLibStruct, &ExampleLibStruct)
+fn.moduleExportCompositeVariable(ExampleLibStruct, &ExampleLibStruct)
 
 &exampleLibStructInstance = fn.structOf(&ExampleLibStruct, 42.42f, A text value, 42)
-fn.moduleExportCollectionVariable(exampleLibStructInstance, &exampleLibStructInstance)
+fn.moduleExportCompositeVariable(exampleLibStructInstance, &exampleLibStructInstance)
 
 # Exporting pointers
 $internalVariable = 42
