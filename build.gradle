@@ -7,14 +7,10 @@ version '1.0'
 
 repositories {
     mavenCentral()
-
-    flatDir {
-        dir 'lang'
-    }
 }
 
 dependencies {
-    compileOnly "me.jddev0:lang:1.0.0-dev"
+    compileOnly 'at.jddev0.lang:lang-interpreter:1.0.0-beta-03'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'

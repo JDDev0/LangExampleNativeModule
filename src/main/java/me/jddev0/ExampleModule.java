@@ -2,9 +2,9 @@ package me.jddev0;
 
 import java.util.*;
 
-import me.jddev0.module.lang.*;
-import me.jddev0.module.lang.DataObject.FunctionPointerObject;
-import me.jddev0.module.lang.LangInterpreter.LangInterpreterInterface;
+import at.jddev0.lang.*;
+import at.jddev0.lang.DataObject.FunctionPointerObject;
+import at.jddev0.lang.LangInterpreter.LangInterpreterInterface;
 
 public class ExampleModule extends LangNativeModule {
 	@Override
