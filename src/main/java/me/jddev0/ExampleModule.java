@@ -6,6 +6,9 @@ import at.jddev0.lang.*;
 import at.jddev0.lang.DataObject.FunctionPointerObject;
 import at.jddev0.lang.LangInterpreter.LangInterpreterInterface;
 
+import static at.jddev0.lang.LangFunction.*;
+import static at.jddev0.lang.LangFunction.LangParameter.*;
+
 public class ExampleModule extends LangNativeModule {
 	@Override
 	public DataObject load(List<DataObject> args, final int SCOPE_ID) {
@@ -35,13 +38,15 @@ public class ExampleModule extends LangNativeModule {
 		callPredefinedFunction("println", Arrays.asList(
 				createDataObject("Another print statement.") //createDataObject can be used instead of new DataObject().set...()
 		), SCOPE_ID);
-		
-		exportFunction("exampleFunction", (argumentList, INNER_SCOPE_ID) -> {
-			List<DataObject> innerCombinedArgs = LangUtils.combineArgumentsWithoutArgumentSeparators(argumentList);
 
-			System.out.println("exampleFunction was called with " + innerCombinedArgs);
+		exportNativeFunction(new Object() {
+			@LangFunction("exampleFunction")
+			public DataObject exampleFunctionFunction(int SCOPE_ID,
+			  		@LangParameter("&args") @LangParameter.VarArgs List<DataObject> args) {
+				System.out.println("exampleFunction was called with " + args);
 
-			return createDataObject(innerCombinedArgs.size());
+				return createDataObject(args.size());
+			}
 		});
 
 		exportNormalVariable("testVar", createDataObject("This is a test variable provided by the \"" + lmc.getName() + "\" module!"));
@@ -56,30 +61,24 @@ public class ExampleModule extends LangNativeModule {
 		exportCompositeVariableFinal("finalValues", new DataObject().setArray(new DataObject[] {
 				createDataObject('a'), createDataObject(false)
 		}));
-		exportFunctionPointerVariable("calc", new DataObject().setFunctionPointer(new FunctionPointerObject((interpreter, argumentList, INNER_SCOPE_ID) -> {
-			List<DataObject> combinedArgumentList = LangUtils.combineArgumentsWithoutArgumentSeparators(argumentList);
-			if(combinedArgumentList.size() != 3)
-				return new LangInterpreterInterface(interpreter).setErrnoErrorObject(LangInterpreter.InterpretingError.INVALID_ARG_COUNT, "3 arguments are needed", INNER_SCOPE_ID);
-
-			DataObject aObj = combinedArgumentList.get(0);
-			DataObject bObj = combinedArgumentList.get(1);
-			DataObject cObj = combinedArgumentList.get(2);
-
-			Number aNum = aObj.toNumber();
-			if(aNum == null)
-				return new LangInterpreterInterface(interpreter).setErrnoErrorObject(LangInterpreter.InterpretingError.INVALID_ARGUMENTS, "Argument 1 must be a number", INNER_SCOPE_ID);
-			Number bNum = bObj.toNumber();
-			if(bNum == null)
-				return new LangInterpreterInterface(interpreter).setErrnoErrorObject(LangInterpreter.InterpretingError.INVALID_ARGUMENTS, "Argument 2 must be a number", INNER_SCOPE_ID);
-			Number cNum = cObj.toNumber();
-			if(cNum == null)
-				return new LangInterpreterInterface(interpreter).setErrnoErrorObject(LangInterpreter.InterpretingError.INVALID_ARGUMENTS, "Argument 2 must be a number", INNER_SCOPE_ID);
-
-			return createDataObject(aNum.intValue() * bNum.intValue() + cNum.intValue() * cNum.intValue());
-		})));
-		exportFunctionPointerVariableFinal("finalFunc", new DataObject().setFunctionPointer(new FunctionPointerObject((interpreter, argumentList, INNER_SCOPE_ID) -> {
-			return createDataObject(-42);
-		})));
+		exportFunctionPointerVariable("calc", new DataObject().setFunctionPointer(new FunctionPointerObject(
+				LangNativeFunction.getSingleLangFunctionFromObject(interpreter, new Object() {
+			@LangFunction("calc")
+			public DataObject calcFunction(int SCOPE_ID,
+		    		@LangParameter("$a") @NumberValue Number aNum,
+				    @LangParameter("$b") @NumberValue Number bNum,
+				    @LangParameter("$c") @NumberValue Number cNum) {
+				return createDataObject(aNum.intValue() * bNum.intValue() + cNum.intValue() * cNum.intValue());
+			}
+		}))));
+		exportFunctionPointerVariableFinal("finalFunc", new DataObject().setFunctionPointer(new FunctionPointerObject(
+				LangNativeFunction.getSingleLangFunctionFromObject(interpreter, new Object() {
+			@LangFunction("finalFunc")
+			public DataObject finalFuncFunction(LangInterpreter interpreter, int SCOPE_ID,
+											@LangParameter("&args") @RawVarArgs List<DataObject> ignore) {
+				return createDataObject(-42);
+			}
+		}))));
 
 		DataObject ret = callPredefinedFunction("include", LangUtils.separateArgumentsWithArgumentSeparators(
 				Arrays.asList(
@@ -146,46 +145,46 @@ public class ExampleModule extends LangNativeModule {
 			}
 		}
 
-		exportFunction("testConvertToDataObject", (argumentList, INNER_SCOPE_ID) -> {
-			List<DataObject> combinedArgumentList = LangUtils.combineArgumentsWithoutArgumentSeparators(argumentList);
-			if(combinedArgumentList.size() > 1)
-				return new LangInterpreterInterface(interpreter).setErrnoErrorObject(LangInterpreter.InterpretingError.INVALID_ARG_COUNT, "0 ore 1 argument(s) are needed", INNER_SCOPE_ID);
-
-			if(combinedArgumentList.size() == 0) {
+		exportNativeFunction(new Object() {
+			@LangFunction(value="testConvertToDataObject", hasInfo=true)
+			public DataObject testConvertToDataObjectFunction(int SCOPE_ID) {
 				callPredefinedFunction("println", Arrays.asList(
-						createDataObject("Call \"func.testConvertToDataObject()\" with 0 for normal output or with 1 for debug output using \"func.printDebug()\" [1 Will only work in the LangShell]")
-				), INNER_SCOPE_ID);
+						createDataObject("Call \"func.testConvertToDataObject()\" with 0 for normal output " +
+								"or with 1 for debug output using \"func.printDebug()\" [1 Will only work in the LangShell]")
+				), SCOPE_ID);
 
 				return null;
 			}
 
-			boolean useLangShellsPrintDebug = combinedArgumentList.get(0).getBoolean();
+			@LangFunction("testConvertToDataObject")
+			public DataObject testConvertToDataObjectFunction(int SCOPE_ID,
+		    		@LangParameter("usePrintDebug") @BooleanValue boolean usePrintDebug) {
+				printDataObjectInformation(convertToDataObject(null), usePrintDebug, SCOPE_ID);
+				printDataObjectInformation(convertToDataObject("text"), usePrintDebug, SCOPE_ID);
+				printDataObjectInformation(convertToDataObject(new Object[] {
+						2, "test", null, Character.class
+				}), usePrintDebug, SCOPE_ID);
+				printDataObjectInformation(convertToDataObject(new byte[] {
+						2, -1, (byte)255, 127, -128, 0, (byte)'A', (byte)'B', (byte)'µ', (byte)1555
+				}), usePrintDebug, SCOPE_ID);
+				printDataObjectInformation(convertToDataObject(42), usePrintDebug, SCOPE_ID);
+				printDataObjectInformation(convertToDataObject(true), usePrintDebug, SCOPE_ID);
+				printDataObjectInformation(convertToDataObject(42.2f), usePrintDebug, SCOPE_ID);
+				printDataObjectInformation(convertToDataObject(42.2), usePrintDebug, SCOPE_ID);
+				printDataObjectInformation(convertToDataObject('a'), usePrintDebug, SCOPE_ID);
+				printDataObjectInformation(convertToDataObject(new RuntimeException("A custom error")), usePrintDebug, SCOPE_ID);
+				printDataObjectInformation(convertToDataObject(new IllegalStateException("Another error")), usePrintDebug, SCOPE_ID);
+				printDataObjectInformation(convertToDataObject(Integer.class), usePrintDebug, SCOPE_ID);
+				printDataObjectInformation(convertToDataObject(Boolean.class), usePrintDebug, SCOPE_ID);
+				printDataObjectInformation(convertToDataObject(Long.class), usePrintDebug, SCOPE_ID);
+				printDataObjectInformation(convertToDataObject(Class.class), usePrintDebug, SCOPE_ID);
+				printDataObjectInformation(convertToDataObject(Object[].class), usePrintDebug, SCOPE_ID); //DataType.ARRAY
+				printDataObjectInformation(convertToDataObject(DataObject[].class), usePrintDebug, SCOPE_ID); //DataType.ARRAY
+				printDataObjectInformation(convertToDataObject(Byte[].class), usePrintDebug, SCOPE_ID); //DataType.ARRAY
+				printDataObjectInformation(convertToDataObject(byte[].class), usePrintDebug, SCOPE_ID); //ByteBuffer.ARRAY
 
-			printDataObjectInformation(convertToDataObject(null), useLangShellsPrintDebug, INNER_SCOPE_ID);
-			printDataObjectInformation(convertToDataObject("text"), useLangShellsPrintDebug, INNER_SCOPE_ID);
-			printDataObjectInformation(convertToDataObject(new Object[] {
-					2, "test", null, Character.class
-			}), useLangShellsPrintDebug, INNER_SCOPE_ID);
-			printDataObjectInformation(convertToDataObject(new byte[] {
-					2, -1, (byte)255, 127, -128, 0, (byte)'A', (byte)'B', (byte)'µ', (byte)1555
-			}), useLangShellsPrintDebug, INNER_SCOPE_ID);
-			printDataObjectInformation(convertToDataObject(42), useLangShellsPrintDebug, INNER_SCOPE_ID);
-			printDataObjectInformation(convertToDataObject(true), useLangShellsPrintDebug, INNER_SCOPE_ID);
-			printDataObjectInformation(convertToDataObject(42.2f), useLangShellsPrintDebug, INNER_SCOPE_ID);
-			printDataObjectInformation(convertToDataObject(42.2), useLangShellsPrintDebug, INNER_SCOPE_ID);
-			printDataObjectInformation(convertToDataObject('a'), useLangShellsPrintDebug, INNER_SCOPE_ID);
-			printDataObjectInformation(convertToDataObject(new RuntimeException("A custom error")), useLangShellsPrintDebug, INNER_SCOPE_ID);
-			printDataObjectInformation(convertToDataObject(new IllegalStateException("Another error")), useLangShellsPrintDebug, INNER_SCOPE_ID);
-			printDataObjectInformation(convertToDataObject(Integer.class), useLangShellsPrintDebug, INNER_SCOPE_ID);
-			printDataObjectInformation(convertToDataObject(Boolean.class), useLangShellsPrintDebug, INNER_SCOPE_ID);
-			printDataObjectInformation(convertToDataObject(Long.class), useLangShellsPrintDebug, INNER_SCOPE_ID);
-			printDataObjectInformation(convertToDataObject(Class.class), useLangShellsPrintDebug, INNER_SCOPE_ID);
-			printDataObjectInformation(convertToDataObject(Object[].class), useLangShellsPrintDebug, INNER_SCOPE_ID); //DataType.ARRAY
-			printDataObjectInformation(convertToDataObject(DataObject[].class), useLangShellsPrintDebug, INNER_SCOPE_ID); //DataType.ARRAY
-			printDataObjectInformation(convertToDataObject(Byte[].class), useLangShellsPrintDebug, INNER_SCOPE_ID); //DataType.ARRAY
-			printDataObjectInformation(convertToDataObject(byte[].class), useLangShellsPrintDebug, INNER_SCOPE_ID); //ByteBuffer.ARRAY
-
-			return null;
+				return null;
+			}
 		});
 
 		System.out.println("Test convertToDataObject() by calling \"func.testConvertToDataObject()\"");
