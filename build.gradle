@@ -18,28 +18,30 @@ dependencies {
 
 String moduleJarBaseName = 'Module.jar'
 
-task cleanLangModuleBuild() {
+tasks.register("cleanLangModuleBuild") {
     delete layout.buildDirectory.dir('tmp/langmodule')
 }
 
-task buildNativeCode(type: Jar) {
+tasks.register("buildNativeCode", Jar) {
     archiveFileName = moduleJarBaseName
 
     destinationDirectory = layout.buildDirectory.dir('tmp/langmodule/native')
     with jar
 }
 
-task copyLangModuleFiles(type: Copy) {
+tasks.register("copyLangModuleFiles", Copy) {
     from 'src/main/langmodule'
 
     into layout.buildDirectory.dir('tmp/langmodule')
 }
 
-task prepareLangModuleFiles() {
+tasks.register("prepareLangModuleFiles") {
     dependsOn cleanLangModuleBuild, buildNativeCode, copyLangModuleFiles
 }
 
-task buildLangModule(type: Zip, dependsOn: prepareLangModuleFiles) {
+tasks.register("buildLangModule", Zip) {
+    dependsOn prepareLangModuleFiles
+
     from layout.buildDirectory.dir('tmp/langmodule')
 
     archiveName 'module.lm'
