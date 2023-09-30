@@ -41,8 +41,10 @@ public class ExampleModule extends LangNativeModule {
 
 		exportNativeFunction(new Object() {
 			@LangFunction("exampleFunction")
-			public DataObject exampleFunctionFunction(int SCOPE_ID,
-			  		@LangParameter("&args") @LangParameter.VarArgs List<DataObject> args) {
+			public DataObject exampleFunctionFunction(
+					int SCOPE_ID,
+			  		@LangParameter("&args") @LangParameter.VarArgs List<DataObject> args
+			) {
 				System.out.println("exampleFunction was called with " + args);
 
 				return createDataObject(args.size());
@@ -64,18 +66,22 @@ public class ExampleModule extends LangNativeModule {
 		exportFunctionPointerVariable("calc", new DataObject().setFunctionPointer(new FunctionPointerObject(
 				LangNativeFunction.getSingleLangFunctionFromObject(interpreter, new Object() {
 			@LangFunction("calc")
-			public DataObject calcFunction(int SCOPE_ID,
+			public DataObject calcFunction(
+					int SCOPE_ID,
 		    		@LangParameter("$a") @NumberValue Number aNum,
 				    @LangParameter("$b") @NumberValue Number bNum,
-				    @LangParameter("$c") @NumberValue Number cNum) {
+				    @LangParameter("$c") @NumberValue Number cNum
+			) {
 				return createDataObject(aNum.intValue() * bNum.intValue() + cNum.intValue() * cNum.intValue());
 			}
 		}))));
 		exportFunctionPointerVariableFinal("finalFunc", new DataObject().setFunctionPointer(new FunctionPointerObject(
 				LangNativeFunction.getSingleLangFunctionFromObject(interpreter, new Object() {
 			@LangFunction("finalFunc")
-			public DataObject finalFuncFunction(LangInterpreter interpreter, int SCOPE_ID,
-											@LangParameter("&args") @RawVarArgs List<DataObject> ignore) {
+			public DataObject finalFuncFunction(
+					LangInterpreter interpreter, int SCOPE_ID,
+					@LangParameter("&args") @RawVarArgs List<DataObject> ignore
+			) {
 				return createDataObject(-42);
 			}
 		}))));
@@ -147,7 +153,9 @@ public class ExampleModule extends LangNativeModule {
 
 		exportNativeFunction(new Object() {
 			@LangFunction(value="testConvertToDataObject", hasInfo=true)
-			public DataObject testConvertToDataObjectFunction(int SCOPE_ID) {
+			public DataObject testConvertToDataObjectFunction(
+					int SCOPE_ID
+			) {
 				callPredefinedFunction("println", Arrays.asList(
 						createDataObject("Call \"func.testConvertToDataObject()\" with 0 for normal output " +
 								"or with 1 for debug output using \"func.printDebug()\" [1 Will only work in the LangShell]")
@@ -157,8 +165,10 @@ public class ExampleModule extends LangNativeModule {
 			}
 
 			@LangFunction("testConvertToDataObject")
-			public DataObject testConvertToDataObjectFunction(int SCOPE_ID,
-		    		@LangParameter("usePrintDebug") @BooleanValue boolean usePrintDebug) {
+			public DataObject testConvertToDataObjectFunction(
+					int SCOPE_ID,
+		    		@LangParameter("usePrintDebug") @BooleanValue boolean usePrintDebug
+			) {
 				printDataObjectInformation(convertToDataObject(null), usePrintDebug, SCOPE_ID);
 				printDataObjectInformation(convertToDataObject("text"), usePrintDebug, SCOPE_ID);
 				printDataObjectInformation(convertToDataObject(new Object[] {
