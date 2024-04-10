@@ -64,7 +64,7 @@ public class ExampleModule extends LangNativeModule {
 				createDataObject('a'), createDataObject(false)
 		}));
 		exportFunctionPointerVariable("calc", new DataObject().setFunctionPointer(new FunctionPointerObject(
-				LangNativeFunction.getSingleLangFunctionFromObject(interpreter, new Object() {
+				LangNativeFunction.getSingleLangFunctionFromObject(new Object() {
 			@LangFunction("calc")
 			public DataObject calcFunction(
 					int SCOPE_ID,
@@ -76,7 +76,7 @@ public class ExampleModule extends LangNativeModule {
 			}
 		}))));
 		exportFunctionPointerVariableFinal("finalFunc", new DataObject().setFunctionPointer(new FunctionPointerObject(
-				LangNativeFunction.getSingleLangFunctionFromObject(interpreter, new Object() {
+				LangNativeFunction.getSingleLangFunctionFromObject(new Object() {
 			@LangFunction("finalFunc")
 			public DataObject finalFuncFunction(
 					LangInterpreter interpreter, int SCOPE_ID,
